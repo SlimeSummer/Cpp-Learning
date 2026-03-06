@@ -21,7 +21,7 @@ Status StrAssign(String s, char* chars){
     }
 }
 
-int Index1(String s, String subs, int pos){
+int Index1(String s, String subs, int pos){     //暴力匹配
     int i=pos;
     int j=1;
     while (i<=s[0] && j<=subs[0]){
@@ -32,6 +32,40 @@ int Index1(String s, String subs, int pos){
         else{
             i=i-j+2;
             j=1;
+        }
+    }
+    if (j>subs[0])
+        return i-subs[0];
+    else
+        return 0;
+}
+
+void GetNext(String s, int* next){      //计算出最长前后缀next数组的值
+    int i=1, k=0;
+    next[1]=0;
+    while(i<s[0]){
+        if (k==0 || s[i]==s[k]){
+            k++;
+            i++;
+            next[i]=k;
+        }
+        else
+            k=next[k];
+    }
+}
+
+int IndexKMP(String s, String subs, int pos){      //KMP算法
+    int i=pos;
+    int j=1;
+    int next[255];
+    GetNext(subs, next);
+    while (i<=s[0] && j<=subs[0]){
+        if (j==0 || s[i]==subs[j]){
+            i++;
+            j++;
+        }
+        else{
+            j=next[j];
         }
     }
     if (j>subs[0])
