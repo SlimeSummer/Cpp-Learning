@@ -41,16 +41,33 @@ int Index1(String s, String subs, int pos){     //暴力匹配
 }
 
 void GetNext(String s, int* next){      //计算出最长前后缀next数组的值
-    int i=1, k=0;
+    int i=1, j=0;
     next[1]=0;
     while(i<s[0]){
-        if (k==0 || s[i]==s[k]){
-            k++;
+        if (j==0 || s[i]==s[j]){
+            j++;
             i++;
-            next[i]=k;
+            next[i]=j;
         }
         else
-            k=next[k];
+            j=next[j];
+    }
+}
+
+void GetNextVal(String s, int* next){   //计算next数组值的优化方法
+    int i=1, j=0;
+    next[1]=0;
+    while(i<s[0]){
+        if (j==0 || s[i]==s[j]){
+            i++;
+            j++;
+            if (s[i]==s[j])
+                next[i]=next[j];
+            else
+                next[i]=j;
+        }
+        else
+            j=next[j];
     }
 }
 
@@ -58,7 +75,7 @@ int IndexKMP(String s, String subs, int pos){      //KMP算法
     int i=pos;
     int j=1;
     int next[255];
-    GetNext(subs, next);
+    GetNextVal(subs, next);
     while (i<=s[0] && j<=subs[0]){
         if (j==0 || s[i]==subs[j]){
             i++;
@@ -90,7 +107,7 @@ int main(){
     cout <<"s2: ";
     StrPrint(s2);
 
-    int i=Index1(s1, s2, 6);
+    int i=IndexKMP(s1, s2, 7);
     cout << i;
 
     return 0;
